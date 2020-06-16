@@ -101,7 +101,6 @@ namespace Calculator
         public override string ToString()
         {
             string outputString;
-            string formatstring = "{0:F" + maxDigits.ToString() + "}";
             if (value != null)
             {
                 if (currentState == State.buildingDecimal)
@@ -111,11 +110,16 @@ namespace Calculator
                 }
                 else
                 {
-                    // reduce any decimal part by rounding 
+                    // See how many digits are used by the integer part of a number
                     // value.Value ensures us a non-nullable decimal
-                    decimal roundedValue = Decimal.Round(value.Value, maxDigits-1);
+                    int integerDigits = Decimal.Truncate(Math.Abs(value.Value)).ToString().Length;
+                    int floatDigits = maxDigits - integerDigits;
+                    // reduce any decimal part by rounding within unused digits
+                    decimal roundedValue = Decimal.Round(value.Value, floatDigits);
 
+                    // Convert decimal to a string 
                     // Remove trailing zeros (there will always be a decimal point)
+                    string formatstring = "{0:F" + (floatDigits+1).ToString() + "}";
                     outputString = String.Format(formatstring, roundedValue).TrimEnd('0').TrimEnd('.');
                     
                     // Calculate maximum string length allowing for possible decimal point and minus sign
@@ -124,7 +128,7 @@ namespace Calculator
                     if (outputString.Contains("-")) maxLength++;
 
                     // Trim to no more than maxdigits + sign and decimal point
-                    outputString = outputString.Length <= maxLength ? outputString : outputString.Substring(0, maxLength);
+                    if (outputString.Length > maxLength) outputString = outputString.Substring(0, maxLength);
                 }
 
             }
@@ -139,7 +143,7 @@ namespace Calculator
                         outputString = "Underflow!";
                         break;
                     case State.zeroDivisor:
-                        outputString = "Div. by 0!";
+                        outputString = "0 Divide!";
                         break;
                     case State.error:
                         outputString = "Error!";
@@ -287,6 +291,7 @@ namespace Calculator
 
         public void Point()
         {
+            DebugValues("Start Point");
             if (currentState != State.buildingDecimal)
             {
                 if (currentState == State.zeroed)
@@ -300,10 +305,12 @@ namespace Calculator
                 inputString.Append(".");
                 currentState = State.buildingDecimal;
             }
+            DebugValues("End Point");
         }
 
         public void ChangeSign()
         {
+            DebugValues("Start ChangeSign");
             if (value.HasValue) // not null
             {
                 if (value > 0)
@@ -317,11 +324,15 @@ namespace Calculator
                 //value = decimal.Parse(inputString.ToString());
                 value = -value;
             }
+            DebugValues("End ChangeSign");
         }
 
         public void Clear()
         {
+            DebugValues("Start Clear");
             Zero();
+            DebugValues("End Clear");
+
         }
     }
 }

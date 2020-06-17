@@ -24,6 +24,7 @@ namespace Calculator
             overflow,
             underflow,
             zeroDivisor,
+            undefined,
             error
         }
 
@@ -145,11 +146,11 @@ namespace Calculator
                     case State.zeroDivisor:
                         outputString = "0 Divide!";
                         break;
-                    case State.error:
-                        outputString = "Error!";
+                    case State.undefined:
+                        outputString = "Undefined!";
                         break;
                     default:
-                        outputString = "Undefined";
+                        outputString = "Error!";
                         break;
                 }
 
@@ -196,7 +197,10 @@ namespace Calculator
                     else
                     {
                         value = null;
-                        currentState = State.zeroDivisor;
+                        if (operand1 != 0)
+                            currentState = State.zeroDivisor;
+                        else
+                            currentState = State.undefined;
                     }
                     break;
                 case Operation.equals:

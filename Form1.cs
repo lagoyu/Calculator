@@ -1,16 +1,42 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Drawing;
+using System.Drawing.Text;
 
 namespace Calculator
 {
     
     public partial class Form1 : Form
     {
+        // Font import See https://stackoverflow.com/questions/556147/how-to-quickly-and-easily-embed-fonts-in-winforms-app-in-c-sharp
+            [System.Runtime.InteropServices.DllImport("gdi32.dll")]
+            private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont,
+        IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
+            private PrivateFontCollection fonts = new PrivateFontCollection();
+
         const int DisplayPlaces = 12;
+        const float DisplayFontSize = 64.0F;
+
         Calculator calc = new Calculator(DisplayPlaces);
         public Form1()
         {
             InitializeComponent();
+            InitializeDisplayFont();
+        }
+
+        private void InitializeDisplayFont()
+        {
+            // See https://stackoverflow.com/questions/556147/how-to-quickly-and-easily-embed-fonts-in-winforms-app-in-c-sharp
+            // Freeware Font used http://www.styleseven.com/php/get_product.php?product=Digital-7
+            byte[] fontData = Properties.Resources.Digital7Mono_B1g5;
+            IntPtr fontPtr = System.Runtime.InteropServices.Marshal.AllocCoTaskMem(fontData.Length);
+            System.Runtime.InteropServices.Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
+            uint dummy = 0;
+            fonts.AddMemoryFont(fontPtr, Properties.Resources.Digital7Mono_B1g5.Length);
+            AddFontMemResourceEx(fontPtr, (uint)Properties.Resources.Digital7Mono_B1g5.Length, IntPtr.Zero, ref dummy);
+            System.Runtime.InteropServices.Marshal.FreeCoTaskMem(fontPtr);
+
+            txtDisplay.Font = new Font(fonts.Families[0], DisplayFontSize); 
         }
 
         private void Form1_Load(object sender, EventArgs e)

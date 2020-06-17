@@ -55,13 +55,13 @@
             // 
             this.txtDisplay.BackColor = System.Drawing.Color.Black;
             this.txtDisplay.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtDisplay.Font = new System.Drawing.Font("DSEG7 Classic Mini", 38.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDisplay.Font = new System.Drawing.Font("Digital-7 Mono", 64F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtDisplay.ForeColor = System.Drawing.Color.LimeGreen;
-            this.txtDisplay.Location = new System.Drawing.Point(8, 25);
+            this.txtDisplay.Location = new System.Drawing.Point(8, 12);
             this.txtDisplay.Margin = new System.Windows.Forms.Padding(20);
             this.txtDisplay.Name = "txtDisplay";
             this.txtDisplay.ReadOnly = true;
-            this.txtDisplay.Size = new System.Drawing.Size(543, 56);
+            this.txtDisplay.Size = new System.Drawing.Size(543, 85);
             this.txtDisplay.TabIndex = 0;
             this.txtDisplay.TabStop = false;
             this.txtDisplay.Text = "-1234567890.12";
